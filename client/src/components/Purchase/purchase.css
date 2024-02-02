@@ -1,0 +1,14 @@
+.Search-category {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .Search-category form {
+    display: flex;
+  }
+  
+  .Search-category .form-group {
+    flex-grow: 1;
+    margin-right: 10px; /* Adjust as needed for spacing between input and button */
+  }
+  

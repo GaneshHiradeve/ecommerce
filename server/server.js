@@ -1,0 +1,17 @@
+import app from "./app.js";
+import { ConnectDB } from "./config/connectDB.js";
+import logger from "./utils/logger.js";
+import cloudinary from "cloudinary";
+
+
+cloudinary.v2.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
+ConnectDB();
+
+app.listen(process.env.PORT,()=>{
+    logger.info(`server is running on port ${process.env.PORT}`)
+})

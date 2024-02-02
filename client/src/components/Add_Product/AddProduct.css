@@ -1,0 +1,71 @@
+/* styles.css */
+
+/* Apply basic styles to the form */
+.Product {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px; /* Add padding to the form container */
+    background-color: #f8f9fa; /* Light background color */
+    border: 1px solid #dee2e6; /* Border color */
+    border-radius: 8px;
+  }
+  
+  /* Style form groups */
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  /* Style labels */
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  /* Style form controls */
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Style large form controls */
+  .form-control-lg {
+    font-size: 1.25em;
+  }
+  
+  /* Style textarea */
+  textarea.form-control {
+    resize: vertical; /* Allow vertical resizing of textarea */
+  }
+  
+  /* Style file input */
+  .form-control-file {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Style the submit button */
+  .btn-primary {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1em;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+  }
+  
+  /* Hover effect for the submit button */
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  
