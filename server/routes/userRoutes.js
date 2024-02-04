@@ -1,16 +1,19 @@
 import express from "express";
 import {
+  AddCartProduct,
   AddProduct,
   AllProduct,
+  CartProduct,
+  DeleteCartProduct,
+  OrderProduct,
+  PlaceOrder,
   ProductByCategory,
-  UpdateProfile,
   userChangepassword,
   userLogin,
   userLogout,
   userProfile,
   userProfileupate,
   userRegister,
-  userprofileDelete,
 } from "../controllers/userControllers.js";
 import { isAuthenticatedUser } from "../middlewares/auth.js";
 import { singleUpload } from "../middlewares/multer.js";
@@ -36,7 +39,16 @@ router.route("/allproduct").get(isAuthenticatedUser,AllProduct)
 
 router.route("/category/:category").get(isAuthenticatedUser,ProductByCategory);
 
-// router.route("/updateprofile").put(isAuthenticatedUser,UpdateProfile); todo
+router.route("/addtocart").post(isAuthenticatedUser,AddCartProduct)
+
+router.route("/cartproduct").get(isAuthenticatedUser,CartProduct)
+
+router.route("/deleteproduct/:product_id").delete(isAuthenticatedUser,DeleteCartProduct)
+
+
+router.route("/placeorder").post(isAuthenticatedUser,PlaceOrder)
+
+router.route("/allorders").get(isAuthenticatedUser,OrderProduct)
 
 // router.route("/changepassword/:id").put(isAuthenticatedUser, userChangepassword);
 

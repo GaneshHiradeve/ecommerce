@@ -7,14 +7,18 @@ const Header = () => {
     document.body.classList.toggle("toggle-sidebar");
   };
 
-  const { user } = useSelector((state) => state.user);
+  const { user ,cart_product, isAuthenticated } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
 
   const userlogout = () => {
+
+    if(isAuthenticated){
     dispatch(userLogout());
+    }
+
   };
 
-  const { isAuthenticated } = useSelector((state) => state.user);
   return (
     <main>
       <header
@@ -22,45 +26,32 @@ const Header = () => {
         className="header fixed-top d-flex align-items-center"
       >
         <div className="d-flex align-items-center justify-content-between">
-          <a href="index.html" className="logo d-flex align-items-center">
-            <img src="assets/img/qlogo.png" alt="" />
-            <span className="d-none d-lg-block">QuestionHub</span>
+          <a href="/purchase" className="logo d-flex align-items-center">
+            <img src="assets/img/cart-item.png" alt="" />
+            <span className="d-none d-lg-block">OptiCart</span>
           </a>
           <div onClick={sidebar}>
             <i className="bi bi-list toggle-sidebar-btn"></i>
           </div>
         </div>
 
-        <div className="search-bar">
-          <form
-            className="search-form d-flex align-items-center"
-            method="POST"
-            action="#ok"
-          >
-            <input
-              type="text"
-              name="query"
-              placeholder="Search"
-              title="Enter search keyword"
-            />
-            <button type="submit" title="Search">
-              <i className="bi bi-search"></i>
-            </button>
-          </form>
-        </div>
+        
 
         <nav className="header-nav ms-auto">
+
           <ul className="d-flex align-items-center">
-            <li className="nav-item d-block d-lg-none">
-              <a className="nav-link nav-icon search-bar-toggle " href="#ok">
-                <i className="bi bi-search"></i>
-              </a>
-            </li>
+           
 
             <li className="nav-item dropdown pe-3">
               <a className="nav-link nav-icon" href="/cart">
                 <i class="bi bi-cart-plus"></i>
-                <span className="badge bg-primary badge-number">1</span>
+                {
+                  isAuthenticated ? (<>                <span className="badge bg-primary badge-number">{cart_product && cart_product.length}</span>
+                  </>):(<>
+                    <span className="badge bg-primary badge-number">0</span>
+
+                  </>)
+                }
               </a>
             </li>
 
@@ -71,13 +62,14 @@ const Header = () => {
                 data-bs-toggle="dropdown"
               >
                 <img
-                  src="https://media.istockphoto.com/id/612520134/vector/girl-icon-cartoon-single-avatar-people-icon.jpg?s=612x612&w=0&k=20&c=DiBfKRoHjMpR1Ncm77ZxQLEGaq5JTD-0ddQTy0EkRT0="
+                  src="https://i.pinimg.com/736x/ba/d7/86/bad786dfe4f227555be6fa2484b0b9a3.jpg"
                   alt="Profile"
                   className="rounded-circle"
                 />
                 <span className="d-none d-md-block dropdown-toggle ps-2">
                   {isAuthenticated &&
                     `${user.name[0]}.${user.name.slice(0, 6)}`}
+                    
                 </span>
               </a>
 
@@ -101,17 +93,35 @@ const Header = () => {
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
-
+                  
                 <li>
                   <a
-                    onClick={userlogout}
                     className="dropdown-item d-flex align-items-center"
-                    href="#ok"
+                    href="/allorders"
                   >
-                    <i className="bi bi-box-arrow-right"></i>
-                    <span>Sign Out</span>
+                     <i class="bi bi-cart-plus"></i>
+                    <span>Orders</span>
                   </a>
                 </li>
+                
+                {
+                   isAuthenticated ?
+                  (
+                  <li>
+                    <a
+                      onClick={userlogout}
+                      className="dropdown-item d-flex align-items-center"
+                      href="#ok"
+                    >
+                      <i className="bi bi-box-arrow-right"></i>
+                      <span>Sign Out</span>
+                    </a>
+                  </li>
+                  ):(<></>)
+                }
+               
+
+                
               </ul>
             </li>
           </ul>
@@ -122,20 +132,7 @@ const Header = () => {
         <ul className="sidebar-nav" id="sidebar-nav">
           {isAuthenticated ? (
             <>
-              {/* 
-          <li className="nav-item">
-            <a className="nav-link " href="/">
-              <i class="bi bi-postcard-fill"></i>
-              <span>Post</span>
-            </a>
-          </li>
-
-          <li className="nav-item">
-            <a className="nav-link " href="/dash">
-              <i className="bi bi-grid-fill"></i>
-              <span>Dashboard</span>
-            </a>
-          </li> */}
+          
 
               <li className="nav-item">
                 <a className="nav-link " href="/purchase">
@@ -164,19 +161,20 @@ const Header = () => {
             </>
           )}
 
-          <li className="nav-item">
-            <a className="nav-link " href="/chat">
-              <i class="bi bi-envelope-fill"></i>
-              <span>Contact Experts</span>
-            </a>
-          </li>
-
+         {
+            user && user.role=='Owner'?
+            (<>
+            
           <li className="nav-item">
             <a className="nav-link " href="/add_product">
               <i class="bi bi-envelope-fill"></i>
               <span>Add Product</span>
             </a>
           </li>
+            </>):
+            (<></>)
+         }
+
         </ul>
       </aside>
     </main>

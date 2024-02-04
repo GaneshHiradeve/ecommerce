@@ -7,12 +7,27 @@ import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import { product } from "../models/product.js";
 import { getDataUri } from "../middlewares/fileuri.js";
 import cloudinary from "cloudinary";
+import mongoose from "mongoose";
+import { cart } from "../models/cart.js";
+import { order } from "../models/Order.js";
 
 
 export const userRegister = catchAsyncError(async (req, res) => {
   logger.info(`UserController | User registration in progress for user.`);
 
-  let { name, email, password } = req.body;
+  let { name, email, password ,role} = req.body;
+
+
+
+  if(!name || !email || !password || !role){
+     
+    return res.status(200).json({
+      message: "Input Required",
+      status: true,
+    });
+  }
+
+
 
   let user = await User.findOne({ email });
 
@@ -29,7 +44,9 @@ export const userRegister = catchAsyncError(async (req, res) => {
     name,
     email,
     password,
+    role
   });
+
   const token = Jwt.sign({ id: user._id }, process.env.JWT);
 
   const option = {
@@ -50,6 +67,15 @@ export const userLogin = catchAsyncError(async (req, res, next) => {
   logger.info(`UserController | User Login in progress for user.`);
 
   const { email, password } = req.body;
+
+  
+  if(!email || !password){
+     
+    return res.status(200).json({
+      message: "Input Required",
+      status: true,
+    });
+  }
 
   let user = await User.findOne({ email });
 
@@ -149,57 +175,34 @@ export const userLogout = catchAsyncError((req, res) => {
   logger.info(`UserController | User Logout is Successful for user.`);
 });
 
-export const userprofileDelete = catchAsyncError(async (req, res) => {
-  logger.info(`UserController | User profileDelete in progress for user.`);
-
-  const id = req.user._id;
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    return next(new ErrorHandler("User not exits", 400));
-  }
-
-  await user.deleteOne();
-
-  res.status(201).json({
-    message: "User deleted Successfully",
-    success: true,
-  });
-
-  logger.info(`UserController | User profileDelete is Successful for user.`);
-});
 
 
-export const UpdateProfile = catchAsyncError(async (req, res, next) => {
-  logger.info(
-    `UserController | User registration in progress for user.`
-  );
- 
-  const file = req.body;
 
-  console.log(file)
-
-  if (!file)
-    return next(new ErrorHandler("Please upload profile picture.", 400));
-
-  // const fileUri = getDataUri(file);
-
-  logger.info(
-    `UserController | User registration successfull for user.`
-  );
-});
 
 export const AddProduct=catchAsyncError(async (req,res,next)=>{
   
-         const {product_name,description,price,category} =req.body;
+  logger.info(`UserController | Adding Product in progress for user.`);
 
-         let product_img=req.file;
+         const {product_name,price,category} =req.body;
 
+
+         if(!product_name  || !price || !category){
+     
+          return res.status(200).json({
+            message: "Input Required",
+            status: true,
+          });
+        }
+
+        let product_img=req.file;
         
-
-
-       
+        if(!product_img){
+     
+          return res.status(200).json({
+            message: "Input Required",
+            status: true,
+          });
+        }
 
          const fileUri=getDataUri(product_img);
 
@@ -211,7 +214,6 @@ export const AddProduct=catchAsyncError(async (req,res,next)=>{
 
          const Create_prduct=await product.create({
           product_name,
-          description,
           price,
           category,
           product_img
@@ -239,11 +241,140 @@ export const ProductByCategory=catchAsyncError(async(req,res,next)=>{
 
   const category=req.params.category;
 
-        console.log(category)
   const allproduct=await product.find({category:category});
 
   res.status(201).json({
      allproduct:allproduct,
      status:true
   })
+})
+
+export const AddCartProduct=catchAsyncError(async(req,res,next)=>{
+
+  const { id } = req.body;
+
+  
+        const productData = await product.findOne({ _id: id });
+        const { product_name, price, category, product_img, _id } = productData;
+        const user=req.user._id;
+
+        
+
+
+  const data = { user: user, product_id: _id};
+
+        const CheckCart=await cart.findOne(data)
+
+
+        if(CheckCart){
+          return res.status(200).json({
+            message: "Already Exits",
+            status: true,
+          });
+        }
+
+
+      let product_id=_id;
+
+        const item = await cart.create({
+            user,
+            product_id,
+            product_name,
+            price,
+            category,
+            product_img
+        });
+
+        
+
+  
+
+
+  res.status(201).json({
+     message:"Product Added to Cart",
+     status:true
+  })
+})
+
+
+
+export const CartProduct=catchAsyncError(async(req,res,next)=>{
+
+  const uid=req.user._id;
+
+  const cart_product = await cart.find({ user: uid });
+
+  res.status(201).json({
+    cart_product:cart_product,
+     status:true
+  })
+  
+})
+
+
+export const DeleteCartProduct=catchAsyncError(async(req,res,next)=>{
+
+  const uid=req.user._id;
+
+  const product_id =req.params.product_id;
+
+  const data = { user: uid, product_id: product_id };
+
+
+  const filter = await cart.findOne(data);
+
+await filter.deleteOne();
+
+  res.status(201).json({
+    message:"Product Removed",
+     status:true
+  })
+  
+})
+
+export const PlaceOrder=catchAsyncError(async(req,res,next)=>{
+
+      const {product_id,customerName, mobileNumber,address,payment,city,state, country, pincode}=req.body;
+    
+      const user=req.user._id;
+
+      const product_data=await product.findById(product_id)
+
+      let product_name=product_data.product_name;
+      let price=product_data.price;
+
+      const orderitem=await order.create({
+          user,
+          product_name,
+          customerName,
+          mobileNumber,
+          address,
+          payment,
+          city,
+          state,
+          country,
+          pincode,
+          price
+      })
+     
+      res.status(201).json({
+        message:"Order Placed Successfully",
+        status:true
+      })
+})
+
+
+export const OrderProduct=catchAsyncError(async(req,res,next)=>{
+
+
+
+  const uid=req.user._id;
+
+  const order_product = await order.find({ user: uid });
+
+  res.status(201).json({
+    order_product:order_product,
+     status:true
+  })
+  
 })

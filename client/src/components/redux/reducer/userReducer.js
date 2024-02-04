@@ -148,8 +148,68 @@ export const userReducer = createReducer(
       state.loading = false;
       state.error = action.payload;
     },
-    
 
+    AddcartRequest: state => {
+      state.loading = true;
+    },
+    AddcartSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    },
+    AddcartFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+
+    
+    CartRequest: state => {
+      state.loading = true;
+    },
+    CartSuccess: (state, action) => {
+      state.loading = false;
+      state.cart_product = action.payload.cart_product;
+    },
+    CartFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    
+    DeleteCartRequest: state => {
+      state.loading = true;
+    },
+    DeleteCartSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    },
+    DeleteCartFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    PlaceOrderRequest: state => {
+      state.loading = true;
+    },
+    PlaceOrderSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    },
+    PlaceOrderFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    
+    AllOrdersRequest: state => {
+      state.loading = true;
+    },
+    AllOrdersSuccess: (state, action) => {
+      state.loading = false;
+      state.order_product=action.payload.order_product;
+    },
+    AllOrdersFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     
 
     cleanError: state => {

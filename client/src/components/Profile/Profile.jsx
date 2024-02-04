@@ -3,35 +3,16 @@ import "./profile.css";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UpdateProfilePicture, changePassword } from "../redux/action/user.js";
-
-
+import { changePassword } from "../redux/action/user.js";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [newpassword, setNewpassword] = useState("");
-  const [imagePrev, setImagePrev] = useState('');
-  const [profilepicture, setProfilePicture] = useState('');
   const dispatch = useDispatch();
 
-  const changeImageHandler = e => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImagePrev(reader.result);
-      setProfilePicture(file);
-    };
-  };
-  // console.log(profilepicture)
-  const UpdateProfile=(e)=>{
-      e.preventDefault()
 
-       
-       dispatch(UpdateProfilePicture(imagePrev))
-  }
   const Toastmessage = (message) => {
     toast.warn(message, {
       position: "top-right",
@@ -73,11 +54,11 @@ const Profile = () => {
             <div className="card">
               <div className="card-body profile-card pt-4 d-flex flex-column align-items-center">
                 <img
-                  src="assets/img/profile-img.jpg"
+                  src="https://i.pinimg.com/736x/ba/d7/86/bad786dfe4f227555be6fa2484b0b9a3.jpg"
                   alt="Profile"
                   className="rounded-circle"
                 />
-                <h2>Kevin Anderson</h2>
+                <h2>{user.name}</h2>
               </div>
             </div>
           </div>
@@ -95,15 +76,7 @@ const Profile = () => {
                     </button>
                   </li>
 
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      data-bs-toggle="tab"
-                      data-bs-target="#profile-edit"
-                    >
-                      Edit Profile
-                    </button>
-                  </li>
+                 
 
                   <li className="nav-item">
                     <button
@@ -123,87 +96,27 @@ const Profile = () => {
                   >
                     <div className="row mt-2">
                       <div className="col-lg-3 col-md-4 label ">Full Name</div>
-                      <div className="col-lg-9 col-md-8">{user && user.name}</div>
+                      <div className="col-lg-9 col-md-8">
+                        {user && user.name}
+                      </div>
                     </div>
 
                     <div className="row">
                       <div className="col-lg-3 col-md-4 label">Country</div>
-                      <div className="col-lg-9 col-md-8">USA</div>
+                      <div className="col-lg-9 col-md-8">India</div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-lg-3 col-md-4 label">Role</div>
+                      <div className="col-lg-9 col-md-8">{user.role}</div>
                     </div>
 
                     <div className="row">
                       <div className="col-lg-3 col-md-4 label">Email</div>
-                      <div className="col-lg-9 col-md-8">{user && user.email}</div>
+                      <div className="col-lg-9 col-md-8">
+                        {user && user.email}
+                      </div>
                     </div>
-                  </div>
-
-                  <div
-                    className="tab-pane fade profile-edit pt-3"
-                    id="profile-edit"
-                  >
-                    <form onSubmit={UpdateProfile}>
-                      <div className="row mb-3">
-                        <label
-                          for="profileImage"
-                          className="col-md-4 col-lg-3 col-form-label"
-                        >
-                          Profile Image
-                        </label>
-                        <div className="col-md-8 col-lg-9">
-                          <img src={imagePrev ? imagePrev :"assets/img/profile-img.jpg"} alt="Profile" />
-                          <div className="pt-2 profileicon">
-                            <input
-                              type="file"
-                              id="profilepicture"
-                              name="profilepicture"
-                              onChange={changeImageHandler}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="row mb-3">
-                        <label
-                          for="fullName"
-                          className="col-md-4 col-lg-3 col-form-label"
-                        >
-                          Full Name
-                        </label>
-                        <div className="col-md-8 col-lg-9">
-                          <input
-                            name="fullName"
-                            type="text"
-                            className="form-control"
-                            id="fullName"
-                            placeholder="Enter Full Name"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="row mb-3">
-                        <label
-                          for="Country"
-                          className="col-md-4 col-lg-3 col-form-label"
-                        >
-                          Country
-                        </label>
-                        <div className="col-md-8 col-lg-9">
-                          <input
-                            name="country"
-                            type="text"
-                            className="form-control"
-                            id="Country"
-                            placeholder="Enter Country Name"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="text-center">
-                        <button type="submit" className="btn btn-primary">
-                          Save Changes
-                        </button>
-                      </div>
-                    </form>
                   </div>
 
                   <div
@@ -285,7 +198,6 @@ const Profile = () => {
           </div>
         </div>
       </section>
-     
 
       <ToastContainer />
     </main>

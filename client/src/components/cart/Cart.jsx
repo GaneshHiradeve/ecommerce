@@ -1,193 +1,90 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { CartItem, DeleteCartItem } from "../redux/action/note";
+import { Link } from "react-router-dom";
 
-const Purchase = () => {
+const Cart = () => {
+  const { cart_product, isAuthenticated } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(CartItem());
+    }
+  }, [dispatch, isAuthenticated]);
+
+  const RemoveCartIteam = async(product_id) => {
+    dispatch(DeleteCartItem(product_id));
+    
+  };
   return (
     <main id="main" className="main">
       <div className="container d-flex justify-content-center mt-50 mb-50">
         <div className="row">
-          <div className="col-md-3 mt-4">
-            <div className="card">
-              <div className="card-body">
-                <div className="card-img-actions">
-                  <img
-                    src="https://images.meesho.com/images/products/165013602/7umlw_400.webp"
-                    className="card-img img-fluid"
-                    width="96"
-                    height="350"
-                    alt=""
-                  />
-                </div>
-              </div>
+          {cart_product &&
+            cart_product.map((item, index) => {
+              return (
+                <>
+                  <div className="col-md-3 mt-4" key={index}>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="card-img-actions">
+                          <img
+                            src={item.product_img}
+                            className="card-img img-fluid"
+                            width="96"
+                            height="350"
+                            alt=""
+                          />
+                        </div>
+                      </div>
 
-              <div className="card-body bg-light text-center">
-                <div className="mb-2">
-                  <h6 className="font-weight-semibold mb-2">
-                    <a href="#/" className="text-default mb-2" data-abc="true">
-                      Toshiba Notebook with 500GB HDD & 8GB RAM
-                    </a>
-                  </h6>
+                      <div className="card-body bg-light text-center">
+                        <div className="mb-2">
+                          <h6 className="font-weight-semibold mb-2">
+                            <a
+                              href="#/"
+                              className="text-default mb-2"
+                              data-abc="true"
+                            >
+                              {item.product_name}
+                            </a>
+                          </h6>
 
-                  <a href="#/" className="text-muted" data-abc="true">
-                    Laptops & Notebooks
-                  </a>
-                </div>
+                        </div>
 
-                <h3 className="mb-0 font-weight-semibold">$250.99</h3>
+                        <h3 className="mb-0 font-weight-semibold">$250.99</h3>
 
-                <div>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                </div>
+                      
 
-                <div className="text-muted mb-3">34 reviews</div>
 
-                <button type="button" className="btn bg-cart">
-                  <i className="fa fa-cart-plus mr-2"></i> remove from cart
-                </button>
-              </div>
-            </div>
-          </div>
+                        <Link
+                          to={`/order_product/${item.price}/${item.product_id}`}
+                        >
+                          <button type="button" className="btn bg-cart">
+                            <i className="fa fa-cart-plus mr-2"></i> Place Order
+                          </button>
+                        </Link>
 
-          <div className="col-md-3 mt-4">
-            <div className="card">
-              <div className="card-body">
-                <div className="card-img-actions">
-                  <img
-                    src="https://images.meesho.com/images/products/177427553/lulaj_400.webp"
-                    className="card-img img-fluid"
-                    width="96"
-                    height="350"
-                    alt=""
-                  />
-                </div>
-              </div>
-
-              <div className="card-body bg-light text-center">
-                <div className="mb-2">
-                  <h6 className="font-weight-semibold mb-2">
-                    <a href="#/" className="text-default mb-2" data-abc="true">
-                      Toshiba Notebook with 500GB HDD & 8GB RAM
-                    </a>
-                  </h6>
-
-                  <a href="#/" className="text-muted" data-abc="true">
-                    Laptops & Notebooks
-                  </a>
-                </div>
-
-                <h3 className="mb-0 font-weight-semibold">$250.99</h3>
-
-                <div>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                </div>
-
-                <div className="text-muted mb-3">34 reviews</div>
-
-                <button type="button" className="btn bg-cart">
-                  <i className="fa fa-cart-plus mr-2"></i> remove from cart
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-3 mt-4">
-            <div className="card">
-              <div className="card-body">
-                <div className="card-img-actions">
-                  <img
-                    src="https://images.meesho.com/images/products/118877067/uym9q_400.webp"
-                    className="card-img img-fluid"
-                    width="96"
-                    height="350"
-                    alt=""
-                  />
-                </div>
-              </div>
-
-              <div className="card-body bg-light text-center">
-                <div className="mb-2">
-                  <h6 className="font-weight-semibold mb-2">
-                    <a href="#/" className="text-default mb-2" data-abc="true">
-                      Toshiba Notebook with 500GB HDD & 8GB RAM
-                    </a>
-                  </h6>
-
-                  <a href="#/" className="text-muted" data-abc="true">
-                    Laptops & Notebooks
-                  </a>
-                </div>
-
-                <h3 className="mb-0 font-weight-semibold">$250.99</h3>
-
-                <div>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                </div>
-
-                <div className="text-muted mb-3">34 reviews</div>
-
-                <button type="button" className="btn bg-cart">
-                  <i className="fa fa-cart-plus mr-2"></i> remove from cart
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-3 mt-4">
-            <div className="card">
-              <div className="card-body">
-                <div className="card-img-actions">
-                  <img
-                    src="https://images.meesho.com/images/products/118877067/uym9q_400.webp"
-                    className="card-img img-fluid"
-                    width="96"
-                    height="350"
-                    alt=""
-                  />
-                </div>
-              </div>
-
-              <div className="card-body bg-light text-center">
-                <div className="mb-2">
-                  <h6 className="font-weight-semibold mb-2">
-                    <a href="#/" className="text-default mb-2" data-abc="true">
-                      Toshiba Notebook with 500GB HDD & 8GB RAM
-                    </a>
-                  </h6>
-
-                  <a href="#/" className="text-muted" data-abc="true">
-                    Laptops & Notebooks
-                  </a>
-                </div>
-
-                <h3 className="mb-0 font-weight-semibold">$250.99</h3>
-
-                <div>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                  <i className="fa fa-star star"></i>
-                </div>
-
-                <div className="text-muted mb-3">34 reviews</div>
-
-                <button type="button" className="btn bg-cart">
-                  <i className="fa fa-cart-plus mr-2"></i> remove from cart
-                </button>
-              </div>
-            </div>
-          </div>
+                        <br />
+                        <br />
+                        <button
+                          type="button"
+                          className="btn bg-cart"
+                          onClick={() => RemoveCartIteam(item.product_id)}
+                        >
+                          <i className="fa fa-cart-plus mr-2"></i> Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              );
+            })}
         </div>
       </div>
     </main>
   );
 };
 
-export default Purchase;
+export default Cart;

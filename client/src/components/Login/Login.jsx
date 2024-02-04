@@ -23,10 +23,10 @@ function Login() {
 
     <div className="wrapper">
         <div className="logo1">
-            <img src="assets/img/mmlogo.png" alt=""/>
+            <img src="assets/img/cart-item.png" alt=""/>
         </div>
         <div className="text-center mt-4 name">
-            Menstrual Mavericks
+            OptiCart
         </div>
         <form className="p-3 mt-3">
             <div className="form-field d-flex align-items-center">
@@ -34,6 +34,7 @@ function Login() {
                 <input type="email" name="userEmail" id="userEmail" placeholder="Email"
                  value={email}
                  onChange={e => setEmail(e.target.value)}
+                 required
                 />
             </div>
             <div className="form-field d-flex align-items-center">
@@ -41,6 +42,7 @@ function Login() {
                 <input type="password" name="password" id="pwd" placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                required
                 />
             </div>
             <button className="btn mt-3" onClick={UserLogin}>Login</button>
